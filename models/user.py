@@ -36,7 +36,7 @@ async def create_db_and_tables(connection):
 
 
 if __name__ == '__main__':
-    pass
+
     from time import sleep
 
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
