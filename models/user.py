@@ -5,7 +5,6 @@ from sqlmodel import Field, SQLModel, Session, create_engine, select
 
 
 class UserBase(SQLModel):
-
     name: str = Field(default=0, index=True)
     email: str = Field(default=0, index=True)
     age: int = Field(default=0, index=True)
@@ -30,13 +29,6 @@ class User(UserBase, table=True):
     @classmethod
     async def get_list(cls, session: Session):
         return session.exec(select(cls)).all()
-
-
-class UserRead(SQLModel):
-    id: int
-    name: str
-    email: str
-    age: Optional[int] = None
 
 
 async def create_db_and_tables(connection):
