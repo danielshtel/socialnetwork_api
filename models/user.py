@@ -5,9 +5,9 @@ from sqlmodel import Field, SQLModel, Session, create_engine, select
 
 
 class UserBase(SQLModel):
-    name: str = Field(default=0, index=True)
-    email: str = Field(default=0, index=True)
-    age: int = Field(default=0, index=True)
+    name: str = Field(default=None, index=True)
+    email: str = Field(default=None, index=True)
+    age: int = Field(default=None, index=True)
 
     async def create(self, session: Session):
         with session:
