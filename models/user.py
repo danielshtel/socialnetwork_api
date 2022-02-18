@@ -1,12 +1,12 @@
 import os
 from typing import Optional
-
+from pydantic import EmailStr
 from sqlmodel import Field, SQLModel, Session, create_engine, select
 
 
 class UserBase(SQLModel):
     name: str = Field(default=None, index=True)
-    email: str = Field(default=None, index=True)
+    email: EmailStr = Field(default=None, index=True)
     age: int = Field(default=None, index=True)
 
     async def create(self, session: Session):
