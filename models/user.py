@@ -38,6 +38,14 @@ class User(UserBase, table=True):
             raise HTTPException(status_code=404, detail='User does not exist')
         return user
 
+    async def update_user(self):
+        pass  # !TODO refactor sessions && update
+
+    async def delete_user(self, session: Session):
+        session.delete(self)
+        session.commit()
+        return {'ok': True}
+
 
 class UserUpdate(SQLModel):
     name: Optional[str] = None

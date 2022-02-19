@@ -57,7 +57,12 @@ async def update_user(u_id: int, user: UserUpdate):
     session.add(db_user)
     session.commit()
     session.refresh(db_user)
-    return db_user
+    return db_user  # !TODO logic remove && sessions.
+
+
+@app.delete('/user/{u_id}/')
+async def delete_user(u_id: int):
+    return await (await User.get_user(session=session, u_id=u_id)).delete_user(session=session)
 
 
 if __name__ == '__main__':
