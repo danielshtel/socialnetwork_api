@@ -1,5 +1,6 @@
-import os
 from typing import Optional
+
+from fastapi import HTTPException
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel, Session, create_engine, select
 
@@ -21,14 +22,27 @@ class UserBase(SQLModel):
 class User(UserBase, table=True):
     __tablename__ = 'user'
 
-    id: Optional[int] = Field(default=None, primary_key=True)
+    id: int = Field(default=None, primary_key=True)
 
     class Config:
         orm_mode = True
 
     @classmethod
-    async def get_list(cls, session: Session):
-        return session.exec(select(cls)).all()
+    async def get_all(cls, session: Session, limit: int, offset: int = 0) -> list:
+        return session.exec(select(cls).offset(offset).limit(limit)).all()
+
+    @classmethod
+    async def get_user(cls, session: Session, u_id: int):
+        user = session.get(cls, u_id)
+        if not user:
+            raise HTTPException(status_code=404, detail='User does not exist')
+        return user
+
+
+class UserUpdate(SQLModel):
+    name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    age: Optional[int] = None
 
 
 async def create_db_and_tables(connection):
@@ -36,12 +50,13 @@ async def create_db_and_tables(connection):
 
 
 if __name__ == '__main__':
+    from pathlib import Path
     from time import sleep
 
-    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    SOURCE_DIR = Path(__file__).resolve().parent.parent
 
     connect_args = {"check_same_thread": False}
-    engine = create_engine(f'sqlite:///{ROOT_DIR}/api.db', connect_args=connect_args)
+    engine = create_engine(f'sqlite:///{SOURCE_DIR}/api.db', connect_args=connect_args)
     SQLModel.metadata.drop_all(engine)
     sleep(1)
     SQLModel.metadata.create_all(engine)
