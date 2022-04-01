@@ -1,14 +1,15 @@
+from datetime import date
 from typing import Optional
 
 from fastapi import HTTPException
 from pydantic import EmailStr
-from sqlmodel import Field, SQLModel, Session, create_engine, select
+from sqlmodel import Field, SQLModel, Session, select
 
 
 class UserBase(SQLModel):
     name: str = Field(default=None, index=True)
     email: EmailStr = Field(default=None, index=True)
-    age: int = Field(default=None, index=True)
+    age: date = Field(default=None, index=True)
 
     async def create(self, session: Session):
         with session:
@@ -38,8 +39,13 @@ class User(UserBase, table=True):
             raise HTTPException(status_code=404, detail='User does not exist')
         return user
 
-    async def update_user(self):
-        pass  # !TODO refactor sessions && update
+    async def update_user(self, user_data, session: Session):
+        for key, value in user_data.items():
+            setattr(self, key, value)
+        session.add(self)
+        session.commit()
+        session.refresh(self)
+        return self
 
     async def delete_user(self, session: Session):
         session.delete(self)
@@ -50,5 +56,4 @@ class User(UserBase, table=True):
 class UserUpdate(SQLModel):
     name: Optional[str] = None
     email: Optional[EmailStr] = None
-    age: Optional[int] = None
-
+    age: Optional[date] = None
