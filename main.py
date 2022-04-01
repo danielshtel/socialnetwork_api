@@ -7,7 +7,9 @@ from ramda import *
 from db.session import session, engine
 from db.db_init import create_db_and_tables
 from models.user import User, UserBase, UserUpdate
+from models.post import Post, PostBase
 import logging
+
 logging.basicConfig(level=10)
 
 logger = logging.getLogger(name='    ')
@@ -33,6 +35,16 @@ async def login():
 @app.post('/user/create/', response_model=User)
 async def create_user(user: UserBase):
     return await user.create(session=session)
+
+
+@app.post('/post/create/', response_model=Post)
+async def create_post(post: PostBase):
+    return await post.create(session=session)
+
+
+@app.get('/post/like/{post_id}', response_model=Post)
+async def like_post(post_id: int):
+    return await Post.like(post_id=post_id, session=session)
 
 
 @app.get('/user/all', response_model=List[User])
