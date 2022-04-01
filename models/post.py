@@ -1,8 +1,5 @@
-from typing import Optional
-
 from fastapi import HTTPException
-from pydantic import EmailStr
-from sqlmodel import Field, SQLModel, Session, create_engine, select
+from sqlmodel import Field, SQLModel, Session
 
 
 class PostBase(SQLModel):
@@ -15,6 +12,11 @@ class PostBase(SQLModel):
             session.commit()
             session.refresh(post)
             return post
+
+
+class PostResponseView(SQLModel):
+    content: str
+    likes: int
 
 
 class Post(PostBase, table=True):
