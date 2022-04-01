@@ -1,22 +1,22 @@
-import os
 from typing import List
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
-from sqlmodel import create_engine, Session
 from ramda import *
-from models.user import User, create_db_and_tables, UserBase, UserUpdate
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+from db.session import session, engine
+from db.db_init import create_db_and_tables
+from models.user import User, UserBase, UserUpdate
+import logging
+logging.basicConfig(level=10)
 
-engine = create_engine(f'sqlite:///{ROOT_DIR}/api.db')
-
-session = Session(engine)
+logger = logging.getLogger(name='    ')
 app = FastAPI()
 
 
 @app.on_event('startup')
 async def on_startup():
+    logger.info(msg='CREATING DB')
     await create_db_and_tables(connection=engine)
 
 
