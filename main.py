@@ -7,7 +7,7 @@ from ramda import *
 from db.session import session, engine
 from db.db_init import create_db_and_tables
 from models.user import User, UserBase, UserUpdate
-from models.post import Post, PostBase
+from models.post import Post, PostBase, PostResponseView
 import logging
 
 logging.basicConfig(level=10)
@@ -42,7 +42,7 @@ async def create_post(post: PostBase):
     return await post.create(session=session)
 
 
-@app.get('/post/like/{post_id}', response_model=Post)
+@app.get('/post/like/{post_id}', response_model=PostResponseView)
 async def like_post(post_id: int):
     return await Post.like(post_id=post_id, session=session)
 
@@ -64,12 +64,7 @@ async def get_user(u_id: int):
 async def update_user(u_id: int, user: UserUpdate):
     db_user = await User.get_user(u_id=u_id, session=session)
     user_data = user.dict(exclude_unset=True)
-    for key, value in user_data.items():
-        setattr(db_user, key, value)
-    session.add(db_user)
-    session.commit()
-    session.refresh(db_user)
-    return db_user  # !TODO logic remove && sessions.
+    return await db_user.update_user(user_data, session)
 
 
 @app.delete('/user/{u_id}/')
