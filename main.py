@@ -1,14 +1,14 @@
+import logging
 from typing import List
 
 import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from ramda import *
 
-from db.session import session, engine
 from db.db_init import create_db_and_tables
-from models.user import User, UserBase, UserUpdate
+from db.session import session, engine
 from models.post import Post, PostBase, PostResponseView
-import logging
+from models.user import User, UserBase, UserUpdate
 
 logging.basicConfig(level=10)
 
@@ -48,7 +48,7 @@ async def like_post(post_id: int):
 
 
 @app.get('/user/all', response_model=List[User])
-async def users(limit: int = Query(default=20, lt=101, gt=0)):
+async def users(limit: int = Query(..., lt=101, gt=0)):
     user_list = await User.get_all(session=session, limit=limit)
     if is_empty(user_list):
         raise HTTPException(status_code=400, detail='List of users is empty!')
