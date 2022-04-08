@@ -24,8 +24,6 @@ class Post(PostBase, table=True):
     id: int = Field(default=None, primary_key=True)
     likes: int = Field(default=0, index=True)
 
-    # user_id: int = Field(foreign_key='user.id')
-
     @classmethod
     async def get(cls, session: Session, post_id: int):
         post = session.get(cls, post_id)

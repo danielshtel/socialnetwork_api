@@ -1,5 +1,4 @@
 from datetime import date
-from typing import Optional
 
 from fastapi import HTTPException
 from pydantic import EmailStr
@@ -54,6 +53,6 @@ class User(UserBase, table=True):
 
 
 class UserUpdate(SQLModel):
-    name: Optional[str] = None
-    email: Optional[EmailStr] = None
-    age: Optional[date] = None
+    name: str | None = None
+    email: EmailStr | None = None
+    age: date | None = None

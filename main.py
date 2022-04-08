@@ -42,6 +42,11 @@ async def create_post(post: PostBase):
     return await post.create(session=session)
 
 
+@app.get('/post/{post_id}', response_model=PostResponseView)
+async def get_post(post_id: int):
+    return await Post.get(session=session, post_id=post_id)
+
+
 @app.get('/post/like/{post_id}', response_model=PostResponseView)
 async def like_post(post_id: int):
     return await Post.like(post_id=post_id, session=session)
