@@ -45,7 +45,7 @@ async def get_user(u_id: int):
     return await User.get_user(u_id=u_id, session=session)
 
 
-@app.post('/user/', response_model=User)
+@app.post('/user/', response_model=User, response_model_exclude={'password'})
 async def create_user(user: UserBase):
     return await user.create(session=session)
 

@@ -9,12 +9,14 @@ class UserBase(SQLModel):
     name: str = Field(..., index=True)
     email: EmailStr = Field(..., index=True)
     age: date = Field(..., index=True)
+    password: str = Field(...)
 
     class Config:
         schema_extra = {'example': {
             'name': 'User name',
             'age': '2022-12-01',
-            'email': 'example@mail.com'
+            'email': 'example@mail.com',
+            'password': '123456pass'
         }}
 
     async def create(self, session: Session):
@@ -56,7 +58,7 @@ class User(UserBase, table=True):
     async def delete_user(self, session: Session):
         session.delete(self)
         session.commit()
-        return {'ok': True}
+        return self
 
 
 class UserUpdate(SQLModel):

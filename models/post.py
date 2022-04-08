@@ -1,9 +1,17 @@
 from fastapi import HTTPException
+from pydantic import HttpUrl
 from sqlmodel import Field, SQLModel, Session
 
 
 class PostBase(SQLModel):
-    content: str = Field(default=None)
+    content: str = Field(...)
+    image: HttpUrl = Field(...)
+
+    class Config:
+        schema_extra = {'example': {
+            'content': 'here some content',
+            'image': 'https://picsum.photos/id/237/200/300'
+        }}
 
     async def create(self, session: Session):
         with session:
