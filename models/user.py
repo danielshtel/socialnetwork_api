@@ -6,9 +6,16 @@ from sqlmodel import Field, SQLModel, Session, select
 
 
 class UserBase(SQLModel):
-    name: str = Field(default=None, index=True)
-    email: EmailStr = Field(default=None, index=True)
-    age: date = Field(default=None, index=True)
+    name: str = Field(..., index=True)
+    email: EmailStr = Field(..., index=True)
+    age: date = Field(..., index=True)
+
+    class Config:
+        schema_extra = {'example': {
+            'name': 'User name',
+            'age': '2022-12-01',
+            'email': 'example@mail.com'
+        }}
 
     async def create(self, session: Session):
         with session:
@@ -28,7 +35,7 @@ class User(UserBase, table=True):
         orm_mode = True
 
     @classmethod
-    async def get_all(cls, session: Session, limit: int, offset: int = 0) -> list:
+    async def get_all(cls, session: Session, limit: int = 10, offset: int = 0) -> list:
         return session.exec(select(cls).offset(offset).limit(limit)).all()
 
     @classmethod
