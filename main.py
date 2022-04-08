@@ -4,8 +4,8 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Query
 from ramda import *
 
-from db.db_init import create_db_and_tables
 from db.config import session, engine
+from db.db_init import create_db_and_tables
 from models.post import Post, PostBase, PostResponseView
 from models.user import User, UserBase, UserUpdate
 
