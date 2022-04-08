@@ -40,5 +40,6 @@ pip install -r requirements.txt
 python main.py
 ```
 
-#Usage
+# Usage
+
 *Go to http://localhost:8282/docs to view interactive API docs*
