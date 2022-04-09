@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel
-from config import engine
+from db.config import engine
 
 
 async def create_db_and_tables(connection):

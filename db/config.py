@@ -1,5 +1,6 @@
 import os
-from sqlmodel import create_engine, Session, SQLModel
+
+from sqlmodel import create_engine, Session
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
