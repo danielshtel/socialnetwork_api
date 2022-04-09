@@ -1,7 +1,7 @@
 import logging
 
 import uvicorn
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, status, Form, UploadFile, File
 from ramda import *
 
 from db.config import session, engine
@@ -27,9 +27,19 @@ async def on_shutdown():
     logger.info(msg='DB CONNECTION CLOSED')
 
 
-@app.get('/login')
-async def login():
-    pass
+@app.post("/files/")
+async def create_file(file: bytes = File(...)):
+    return {"file_size": len(file)}  # !TODO files uploads
+
+
+@app.post("/uploadfile/")
+async def create_upload_file(file: list[UploadFile]):
+    return {"filename": file}  # !TODO files uploads
+
+
+@app.post("/login/")
+async def login(username: str = Form(...), password: str = Form(...)):
+    return {"username": username}
 
 
 @app.get('/user/all', response_model=list[User])
@@ -45,7 +55,7 @@ async def get_user(u_id: int):
     return await User.get_user(u_id=u_id, session=session)
 
 
-@app.post('/user/', response_model=User, response_model_exclude={'password'})
+@app.post('/user/', response_model=User, response_model_exclude={'password'}, status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserBase):
     return await user.create(session=session)
 
