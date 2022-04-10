@@ -31,7 +31,13 @@ source venv/bin/activate
 ```shell
 pip install -r requirements.txt
 ```
-
+*Create `.env` file in project root directory and set your values*
+```shell
+SERVER_HOST = your host-value here
+SERVER_PORT = your port-value here
+DB_PATH = your db connection path here
+```
+*By default running on http://0.0.0.0:8000*
 # Run project
 
 *CLI*
@@ -42,4 +48,4 @@ python main.py
 
 # Usage
 
-*Go to http://localhost:8282/docs to view interactive API docs*
+*Go to http://0.0.0.0:8000/docs to view interactive API docs*
