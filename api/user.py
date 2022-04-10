@@ -17,9 +17,9 @@ async def users(limit: int | None = Query(None, lt=101, gt=0)):
     return user_list
 
 
-@router.get('/{u_id}', response_model=UserUpdate, tags=['user'])
-async def get_user(u_id: int):
-    return await User.get_user(u_id=u_id, session=session)
+@router.get('/{user_id}', response_model=UserUpdate, tags=['user'])
+async def get_user(user_id: int):
+    return await User.get_user(session=session, user_id=user_id)
 
 
 @router.post('/', response_model=User, response_model_exclude={'password'}, status_code=status.HTTP_201_CREATED,
@@ -28,13 +28,13 @@ async def create_user(user: UserBase):
     return await user.create(session=session)
 
 
-@router.patch('/{u_id}', response_model=User, tags=['user'])
-async def update_user(u_id: int, user: UserUpdate):
-    db_user = await User.get_user(u_id=u_id, session=session)
+@router.patch('/{user_id}', response_model=User, tags=['user'])
+async def update_user(user_id: int, user: UserUpdate):
+    db_user = await User.get_user(session=session, user_id=user_id)
     user_data = user.dict(exclude_unset=True)
     return await db_user.update_user(user_data, session)
 
 
-@router.delete('/{u_id}', response_model=User, response_model_exclude={'password'}, tags=['user'])
-async def delete_user(u_id: int):
-    return await (await User.get_user(session=session, u_id=u_id)).delete_user(session=session)
+@router.delete('/{user_id}', response_model=User, response_model_exclude={'password'}, tags=['user'])
+async def delete_user(user_id: int):
+    return await (await User.get_user(session=session, user_id=user_id)).delete_user()
