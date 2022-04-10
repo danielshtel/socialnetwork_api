@@ -4,10 +4,11 @@ import uvicorn
 from fastapi import FastAPI, HTTPException, Query, status, Form, UploadFile, File
 from ramda import *
 
-from db.config import session, engine
-from db.db_init import create_db_and_tables
+from database import session, engine
+from database import create_db_and_tables
 from models.post import Post, PostBase, PostResponseView
 from models.user import User, UserBase, UserUpdate
+from settings import settings
 
 logging.basicConfig(level=10)
 
@@ -18,7 +19,8 @@ app = FastAPI()
 @app.on_event('startup')
 async def on_startup():
     logger.info(msg='CREATING DB')
-    await create_db_and_tables(connection=engine)
+    # await create_db_and_tables(connection=engine)
+    #
 
 
 @app.on_event('shutdown')
@@ -89,4 +91,4 @@ async def create_post(post: PostBase):
 
 
 if __name__ == '__main__':
-    uvicorn.run('main:app', host='localhost', port=8282, reload=True)
+    uvicorn.run('main:app', host=settings.server_host, port=settings.server_port, reload=True)
