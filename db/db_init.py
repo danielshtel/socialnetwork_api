@@ -11,6 +11,7 @@ if __name__ == '__main__':
     from models.post import Post
     import time
     from main import logger
+
     SQLModel.metadata.drop_all(engine)
     time.sleep(1)
     logger.info(msg='DROPPED')
