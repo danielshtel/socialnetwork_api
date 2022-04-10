@@ -31,7 +31,8 @@ source venv/bin/activate
 ```shell
 pip install -r requirements.txt
 ```
-#Settings
+
+# Settings
 
 *Create `.env` file in project root directory and set your values*
 
