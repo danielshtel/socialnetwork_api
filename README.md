@@ -1,4 +1,4 @@
-# fastapi_socialnetwork_api
+# socialnetwork_api
 
 # Installation
 
@@ -31,18 +31,23 @@ source venv/bin/activate
 ```shell
 pip install -r requirements.txt
 ```
+
 *Create `.env` file in project root directory and set your values*
+
 ```shell
 SERVER_HOST = your host-value here
 SERVER_PORT = your port-value here
 DB_PATH = your db connection path here
 ```
+
 **❗DEFAULT VALUES❗**
+
 ```shell
 SERVER_HOST=0.0.0.0
 SERVER_PORT=8000
 DB_PATH=sqlite:///./instafood_db
 ```
+
 # Run project
 
 *CLI*
