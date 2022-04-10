@@ -22,9 +22,15 @@ class PostBase(SQLModel):
             return post
 
 
-class PostResponseView(SQLModel):
-    content: str
-    likes: int
+class PostUpdate(SQLModel):
+    content: str | None = None
+    image: HttpUrl | None = None
+
+    class Config:
+        schema_extra = {'example': {
+            'content': 'here some content',
+            'image': 'https://picsum.photos/id/237/200/300'
+        }}
 
 
 class Post(PostBase, table=True):
@@ -57,3 +63,11 @@ class Post(PostBase, table=True):
             if not post:
                 raise HTTPException(status_code=404, detail='Post does not exist')
         return post
+
+    async def update(self, post_data: dict, session: Session):
+        for key, value in post_data.items():
+            setattr(self, key, value)
+        session.add(self)
+        session.commit()
+        session.refresh(self)
+        return self
