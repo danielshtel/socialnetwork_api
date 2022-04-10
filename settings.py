@@ -8,8 +8,8 @@ load_dotenv()  # fix bug with dotenv! should remember in future
 
 
 class Settings(BaseSettings):
-    server_host: str
-    server_port: int
+    server_host: str = '0.0.0.0'
+    server_port: int = '8000'
     db_path: str
 
     class Config:
