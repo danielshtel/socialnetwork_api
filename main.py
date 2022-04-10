@@ -11,7 +11,7 @@ from models.user import User, UserBase, UserUpdate
 
 logging.basicConfig(level=10)
 
-logger = logging.getLogger(name='    ')
+logger = logging.getLogger(name='DB LOGGER')
 app = FastAPI()
 
 
@@ -42,7 +42,7 @@ async def login(username: str = Form(...), password: str = Form(...)):
     return {"username": username}
 
 
-@app.get('/user/all', response_model=list[User])
+@app.get('/user/all', response_model=list[User], tags=['user'])
 async def users(limit: int | None = Query(None, lt=101, gt=0)):
     user_list = await User.get_all(session=session, limit=limit)
     if is_empty(user_list):
@@ -50,39 +50,40 @@ async def users(limit: int | None = Query(None, lt=101, gt=0)):
     return user_list
 
 
-@app.get('/user/{u_id}', response_model=UserUpdate)
+@app.get('/user/{u_id}', response_model=UserUpdate, tags=['user'])
 async def get_user(u_id: int):
     return await User.get_user(u_id=u_id, session=session)
 
 
-@app.post('/user/', response_model=User, response_model_exclude={'password'}, status_code=status.HTTP_201_CREATED)
+@app.post('/user/', response_model=User, response_model_exclude={'password'}, status_code=status.HTTP_201_CREATED,
+          tags=['user'])
 async def create_user(user: UserBase):
     return await user.create(session=session)
 
 
-@app.patch('/user/{u_id}', response_model=User)
+@app.patch('/user/{u_id}', response_model=User, tags=['user'])
 async def update_user(u_id: int, user: UserUpdate):
     db_user = await User.get_user(u_id=u_id, session=session)
     user_data = user.dict(exclude_unset=True)
     return await db_user.update_user(user_data, session)
 
 
-@app.delete('/user/{u_id}/')
+@app.delete('/user/{u_id}/', tags=['user'])
 async def delete_user(u_id: int):
     return await (await User.get_user(session=session, u_id=u_id)).delete_user(session=session)
 
 
-@app.get('/post/{post_id}', response_model=PostResponseView)
+@app.get('/post/{post_id}', response_model=PostResponseView, tags=['post'])
 async def get_post(post_id: int):
     return await Post.get(session=session, post_id=post_id)
 
 
-@app.get('/post/like/{post_id}', response_model=PostResponseView)
+@app.get('/post/like/{post_id}', response_model=PostResponseView, tags=['post'])
 async def like_post(post_id: int):
     return await Post.like(post_id=post_id, session=session)
 
 
-@app.post('/post/', response_model=Post)
+@app.post('/post/', response_model=Post, tags=['post'])
 async def create_post(post: PostBase):
     return await post.create(session=session)
 
