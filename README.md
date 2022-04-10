@@ -37,7 +37,12 @@ SERVER_HOST = your host-value here
 SERVER_PORT = your port-value here
 DB_PATH = your db connection path here
 ```
-*By default running on http://0.0.0.0:8000*
+**❗DEFAULT VALUES❗**
+```shell
+SERVER_HOST=0.0.0.0
+SERVER_PORT=8000
+DB_PATH=sqlite:///./instafood_db
+```
 # Run project
 
 *CLI*
