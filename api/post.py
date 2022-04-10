@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from database import session
-from models.post import Post, PostBase, PostUpdate
+from models import Post, PostBase, PostUpdate
 
 router = APIRouter(prefix='/post')
 

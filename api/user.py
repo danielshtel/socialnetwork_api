@@ -2,8 +2,7 @@ from fastapi import APIRouter, HTTPException, Query, status
 from ramda import is_empty
 
 from database import session
-from models import User
-from models.user import UserUpdate, UserBase
+from models import User, UserUpdate, UserBase
 
 router = APIRouter(
     prefix='/user',
