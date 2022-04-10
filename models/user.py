@@ -38,27 +38,31 @@ class User(UserBase, table=True):
 
     @classmethod
     async def get_all(cls, session: Session, limit: int = 10, offset: int = 0) -> list:
-        return session.exec(select(cls).offset(offset).limit(limit)).all()
+        with session:
+            return session.exec(select(cls).offset(offset).limit(limit)).all()
 
     @classmethod
-    async def get_user(cls, session: Session, u_id: int):
-        user = session.get(cls, u_id)
-        if not user:
-            raise HTTPException(status_code=404, detail='User does not exist')
-        return user
+    async def get_user(cls, session: Session, user_id: int):
+        with session:
+            user = session.get(cls, user_id)
+            if not user:
+                raise HTTPException(status_code=404, detail='User does not exist')
+            return user
 
     async def update_user(self, user_data, session: Session):
-        for key, value in user_data.items():
-            setattr(self, key, value)
-        session.add(self)
-        session.commit()
-        session.refresh(self)
-        return self
+        with session:
+            for key, value in user_data.items():
+                setattr(self, key, value)
+            session.add(self)
+            session.commit()
+            session.refresh(self)
+            return self
 
     async def delete_user(self, session: Session):
-        session.delete(self)
-        session.commit()
-        return self
+        with session:
+            session.delete(self)
+            session.commit()
+            return self
 
 
 class UserUpdate(SQLModel):
