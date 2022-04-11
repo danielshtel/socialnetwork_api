@@ -1,6 +1,5 @@
 from fastapi import APIRouter
 
-
 from models import Post, PostBase, PostUpdate
 
 router = APIRouter(prefix='/post')
