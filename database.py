@@ -1,13 +1,15 @@
-import os
-
+from sqlalchemy.orm import declarative_base
 from sqlmodel import create_engine, Session, SQLModel
+
 from settings import settings
 
-ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+engine = create_engine(settings.db_path, connect_args={'check_same_thread': False})
+Base = declarative_base()
 
-engine = create_engine(settings.db_path)
 
-session = Session(engine)
+class SessionMixin(SQLModel):
+    _session: Session = Session(engine)
+
 
 if __name__ == '__main__':
     import time
