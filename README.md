@@ -1,38 +1,38 @@
-# socialnetwork_api
+# SocialNetwork API
 
-# Installation
+# Installation:
 
-*Clone the project*
+*1. Clone the project*
 
 ```shell
 git clone git@github.com:DaniilLevchenko/socialnetwork_api.git
 ```
 
-*Change dir*
+*2. Change directory*
 
 ```shell
 cd socialnetwork_api
 ```
 
-*Create virtual environment*
+*3. Create virtual environment*
 
 ```shell
 python -m venv venv
 ```
 
-*Activate venv*
+*4. Activate venv*
 
 ```shell
 source venv/bin/activate
 ```
 
-*Install dependencies*
+*5. Install dependencies*
 
 ```shell
 pip install -r requirements.txt
 ```
 
-# Settings
+# Settings:
 
 *Create `.env` file in project root directory and set your values*
 
@@ -49,10 +49,11 @@ SERVER_HOST=0.0.0.0
 SERVER_PORT=8000
 DB_PATH=sqlite:///./instafood_db
 ```
-
-# Run project
-
-*CLI*
+# Initialize database:
+```shell
+python database.py
+```
+# Run project:
 
 ```shell
 python main.py
@@ -60,4 +61,4 @@ python main.py
 
 # Usage
 
-*Go to http://0.0.0.0:8000/docs to view interactive API docs*
+**Go to http://0.0.0.0:8000/docs to view interactive API docs**
