@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, HTTPException, Query, status, Response
 from ramda import is_empty
 
 from models import User, UserUpdate, UserBase
@@ -34,6 +34,9 @@ async def update_user(user_id: int, user: UserUpdate):
     return await db_user.update_user(user_data)
 
 
-@router.delete('/{user_id}', response_model=User, response_model_exclude={'password'}, tags=['user'])
+@router.delete('/{user_id}',
+               tags=['user'],
+               status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(user_id: int):
-    return await (await User.get_user(user_id=user_id)).delete_user()
+    await (await User.get_user(user_id=user_id)).delete_user()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

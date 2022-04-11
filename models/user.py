@@ -20,6 +20,7 @@ class UserBase(SessionMixin, SQLModel):
             'email': 'example@mail.com',
             'password': '123456pass'
         }}
+        orm_mode = True
 
     async def create(self):
         with self._session:
@@ -34,9 +35,6 @@ class User(UserBase, table=True):
     __tablename__ = 'user'
 
     id: int = Field(default=None, primary_key=True)
-
-    class Config:
-        orm_mode = True
 
     @classmethod
     async def get_all(cls, limit: int = 10, offset: int = 0) -> list:
@@ -64,7 +62,6 @@ class User(UserBase, table=True):
         with self._session:
             self._session.delete(self)
             self._session.commit()
-            return self
 
 
 class UserUpdate(SQLModel):
