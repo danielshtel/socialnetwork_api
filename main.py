@@ -4,21 +4,19 @@ import uvicorn
 from fastapi import FastAPI, Form, UploadFile, File
 
 from api import router
-from database import create_db_and_tables
-from database import session, engine
+from database import session
 from settings import settings
 
 logging.basicConfig(level=10)
 
-logger = logging.getLogger(name='DB LOGGER')
+logger = logging.getLogger(name=__name__)
 app = FastAPI()
 app.include_router(router=router)
 
 
 @app.on_event('startup')
 async def on_startup():
-    logger.info(msg='CREATING DB')
-    await create_db_and_tables(connection=engine)
+    pass
 
 
 @app.on_event('shutdown')
