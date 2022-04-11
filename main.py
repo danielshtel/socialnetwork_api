@@ -4,7 +4,7 @@ import uvicorn
 from fastapi import FastAPI, Form, UploadFile, File
 
 from api import router
-from database import session
+# from database import session
 from settings import settings
 
 logging.basicConfig(level=10)
@@ -21,7 +21,7 @@ async def on_startup():
 
 @app.on_event('shutdown')
 async def on_shutdown():
-    session.close()
+    # session.close()
     logger.info(msg='DB CONNECTION CLOSED')
 
 
