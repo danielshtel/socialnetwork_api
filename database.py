@@ -9,18 +9,16 @@ engine = create_engine(settings.db_path)
 
 session = Session(engine)
 
-
-async def create_db_and_tables(connection):
-    SQLModel.metadata.create_all(connection)
-
-
 if __name__ == '__main__':
     import time
-    from main import logger
+    import logging
+
+    logging.basicConfig(level=10)
+    logger = logging.getLogger(name='database')
 
     SQLModel.metadata.drop_all(engine)
     time.sleep(1)
     logger.info(msg='DROPPED')
-    # SQLModel.metadata.create_all(engine)
-    # time.sleep(1)
-    # logger.info(msg='CREATED')
+    SQLModel.metadata.create_all(engine)
+    time.sleep(1)
+    logger.info(msg='CREATED')
