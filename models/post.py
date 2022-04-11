@@ -33,6 +33,7 @@ class PostUpdate(SQLModel):
             'content': 'here some content',
             'image': 'https://picsum.photos/id/237/200/300'
         }}
+        orm_mode = True
 
 
 class Post(PostBase, table=True):
