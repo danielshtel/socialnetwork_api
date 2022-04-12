@@ -12,15 +12,17 @@ class SessionMixin(SQLModel):
 if __name__ == '__main__':
     import time
     import logging
+    import os
     from models import User, Post
+
     logging.basicConfig(level=10)
     logger = logging.getLogger(name='database')
-    try:
-        # SQLModel.metadata.drop_all(engine)
-        # time.sleep(1)
-        # logger.info(msg='DROPPED')
-        SQLModel.metadata.create_all(engine)
-        time.sleep(1)
-        logger.info(msg='CREATED')
-    except Exception as e:
-        logger.info(msg=e)
+    if not os.path.exists('instafood_db'):
+        try:
+            SQLModel.metadata.create_all(engine)
+            time.sleep(1)
+            logger.info(msg='CREATED')
+        except Exception as e:
+            logger.info(msg=e)
+    else:
+        logger.info(msg='DATABASE EXISTS')
