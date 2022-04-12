@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  sqlite:
+    image: nouchka/sqlite3:latest
+    env_file:
+      - .env
+    command: python database.py # !TODO need fix
+    volumes:
+      - "/socialnetwork_api" # !TODO incorrect volume usage
+    depends_on:
+      - instafood_api
+  instafood_api:
+    build: .
+    command: python ./main.py
+    ports:
+      - ${SERVER_PORT}:${SERVER_PORT}
