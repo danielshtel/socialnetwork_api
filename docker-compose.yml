@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     working_dir: /socialnetwork_api
+    image: danielshtel/sqlite
     env_file:
       - .env
     entrypoint: ["python" , "database.py"]
@@ -19,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    image: danielshtel/instafood
     env_file:
       - .env
     ports:
