@@ -5,7 +5,7 @@
 *1. Clone the project*
 
 ```shell
-git clone git@github.com:DaniilLevchenko/socialnetwork_api.git
+git clone git@github.com:danielshtel/socialnetwork_api.git
 ```
 
 *2. Change directory*
