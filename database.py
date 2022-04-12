@@ -16,9 +16,9 @@ if __name__ == '__main__':
     logging.basicConfig(level=10)
     logger = logging.getLogger(name='database')
     try:
-        SQLModel.metadata.drop_all(engine)
-        time.sleep(1)
-        logger.info(msg='DROPPED')
+        # SQLModel.metadata.drop_all(engine)
+        # time.sleep(1)
+        # logger.info(msg='DROPPED')
         SQLModel.metadata.create_all(engine)
         time.sleep(1)
         logger.info(msg='CREATED')
