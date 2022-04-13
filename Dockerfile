@@ -8,6 +8,4 @@ RUN pip install --no-cache-dir --upgrade -r /socialnetwork_api/requirements.txt
 
 COPY . .
 
-EXPOSE 8282
-
 ENTRYPOINT ["python",  "./main.py"]

@@ -1,38 +1,12 @@
 # SocialNetwork API
 
-# Installation:
-
-*1. Clone the project*
+### Clone the project
 
 ```shell
 git clone git@github.com:danielshtel/socialnetwork_api.git
 ```
 
-*2. Change directory*
-
-```shell
-cd socialnetwork_api
-```
-
-*3. Create virtual environment*
-
-```shell
-python -m venv venv
-```
-
-*4. Activate venv*
-
-```shell
-source venv/bin/activate
-```
-
-*5. Install dependencies*
-
-```shell
-pip install -r requirements.txt
-```
-
-# Settings:
+### Settings:
 
 *Create `.env` file in project root directory and set your values*
 
@@ -46,19 +20,70 @@ DB_PATH = your db connection path here
 
 ```shell
 SERVER_HOST=0.0.0.0
-SERVER_PORT=8000
+SERVER_PORT=80
 DB_PATH=sqlite:///./instafood_db
 ```
-# Initialize database:
+## Installation:
+###Manual:
+<details>
+    <summary>Click</summary>
+
+*1. Change directory*
+
+```shell
+cd socialnetwork_api
+```
+
+*2. Create virtual environment*
+
+```shell
+python -m venv venv
+```
+
+*3. Activate venv*
+
+```shell
+source venv/bin/activate
+```
+
+*4. Install dependencies*
+
+```shell
+pip install -r requirements.txt
+```
+
+#### Initialize database:
+
 ```shell
 python database.py
 ```
-# Run project:
+
+#### Run the project:
 
 ```shell
 python main.py
 ```
 
+</details>
+
+###Docker-compose:
+<details>
+<summary>Click</summary>
+
+**Make sure you set environment variables in `.env`**
+
+####To start container:
+```shell
+docker-compose up -d
+```
+
+####To stop container:
+```shell
+docker-compose stop
+```
+
+</details>
+
 # Usage
 
-**Go to http://0.0.0.0:8000/docs to view interactive API docs**
+**Go to http://localhost/docs to view interactive API docs**

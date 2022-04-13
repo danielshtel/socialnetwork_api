@@ -27,5 +27,8 @@ services:
       - data:/socialnetwork_api
     env_file:
       - .env
+    expose:
+      - "80"
+      - "8000"
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
