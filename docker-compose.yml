@@ -21,6 +21,8 @@ services:
       context: .
       dockerfile: Dockerfile
     image: danielshtel/instafood
+    volumes:
+      - .:/socialnetwork_api
     env_file:
       - .env
     ports:

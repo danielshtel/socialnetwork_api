@@ -1,3 +1,4 @@
+instafood_db
 .gitignore
 .git
 .idea
@@ -110,7 +111,6 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
 .venv
 env/
 venv/
