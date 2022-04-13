@@ -23,8 +23,11 @@ SERVER_HOST=0.0.0.0
 SERVER_PORT=80
 DB_PATH=sqlite:///./instafood_db
 ```
+
 ## Installation:
-###Manual:
+
+### Manual:
+
 <details>
     <summary>Click</summary>
 
@@ -66,18 +69,22 @@ python main.py
 
 </details>
 
-###Docker-compose:
+### Docker-compose:
+
 <details>
+
 <summary>Click</summary>
 
 **Make sure you set environment variables in `.env`**
 
-####To start container:
+#### To start container:
+
 ```shell
 docker-compose up -d
 ```
 
-####To stop container:
+#### To stop container:
+
 ```shell
 docker-compose stop
 ```
