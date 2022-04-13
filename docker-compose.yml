@@ -1,4 +1,6 @@
 version: "3.9"
+volumes:
+  data:
 
 services:
   sqlite:
@@ -12,7 +14,7 @@ services:
     entrypoint: ["python" , "database.py"]
 
     volumes:
-      - .:/socialnetwork_api
+      - data:/socialnetwork_api
     depends_on:
       - instafood_api
 
@@ -22,7 +24,7 @@ services:
       dockerfile: Dockerfile
     image: danielshtel/instafood
     volumes:
-      - .:/socialnetwork_api
+      - data:/socialnetwork_api
     env_file:
       - .env
     ports:
