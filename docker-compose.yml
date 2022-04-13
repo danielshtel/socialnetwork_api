@@ -28,7 +28,6 @@ services:
     env_file:
       - .env
     expose:
-      - "80"
-      - "8000"
+      - ${SERVER_PORT}
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
