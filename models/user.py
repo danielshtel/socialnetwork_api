@@ -8,19 +8,27 @@ from database import SessionMixin
 
 
 class UserBase(SessionMixin, SQLModel):
-    name: str = Field(..., index=True)
-    email: EmailStr = Field(..., index=True)
+    username: str = Field(..., index=True,
+                          sa_column_kwargs={'unique': True})  # https://github.com/tiangolo/sqlmodel/issues/65
+    email: EmailStr = Field(..., index=True, sa_column_kwargs={'unique': True})
     age: date = Field(..., index=True)
-    password: str = Field(...)
+    hashed_password: str = Field(...)
 
     class Config:
         schema_extra = {'example': {
-            'name': 'User name',
+            'username': 'username',
             'age': '2022-12-01',
             'email': 'example@mail.com',
-            'password': '123456pass'
+            'hashed_password': '123456'
         }}
         orm_mode = True
+
+
+class UserAuth(UserBase):
+    hashed_password: str
+
+
+class UserCreate(UserBase):
 
     async def create(self):
         with self._session:
@@ -40,6 +48,11 @@ class User(UserBase, table=True):
     async def get_all(cls, limit: int = 10, offset: int = 0) -> list:
         with cls._session:
             return cls._session.exec(select(cls).offset(offset).limit(limit)).all()
+
+    @classmethod
+    async def get_by_username(cls, username: str):
+        user = cls._session.exec(select(cls).where(cls.username == username)).first()
+        return user
 
     @classmethod
     async def get_user(cls, user_id: int):
@@ -65,6 +78,6 @@ class User(UserBase, table=True):
 
 
 class UserUpdate(SQLModel):
-    name: str | None = None
+    username: str | None = None
     email: EmailStr | None = None
     age: date | None = None

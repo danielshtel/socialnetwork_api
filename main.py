@@ -1,7 +1,7 @@
 import logging
 
 import uvicorn
-from fastapi import FastAPI, Form, UploadFile, File
+from fastapi import FastAPI
 from sqlmodel import Session
 
 from api import router
@@ -27,19 +27,19 @@ async def on_shutdown():
     logger.info(msg='DB CONNECTION CLOSED')
 
 
-@app.post("/files/")
-async def create_file(file: bytes = File(...)):
-    return {"file_size": len(file)}  # !TODO files uploads
-
-
-@app.post("/uploadfile/")
-async def create_upload_file(file: list[UploadFile]):
-    return {"filename": file}  # !TODO files uploads
-
-
-@app.post("/login/")
-async def login(username: str = Form(...), password: str = Form(...)):
-    return {"username": username}
+# @app.post("/files/")
+# async def create_file(file: bytes = File(...)):
+#     return {"file_size": len(file)}  # !TODO files uploads
+#
+#
+# @app.post("/uploadfile/")
+# async def create_upload_file(file: list[UploadFile]):
+#     return {"filename": file}  # !TODO files uploads
+#
+#
+# @app.post("/login/")
+# async def login(username: str = Form(...), password: str = Form(...)):
+#     return {"username": username}
 
 
 if __name__ == '__main__':

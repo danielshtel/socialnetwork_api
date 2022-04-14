@@ -17,6 +17,7 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=10)
     logger = logging.getLogger(name='database')
+
     if not os.path.exists('instafood_db'):
         try:
             SQLModel.metadata.create_all(engine)

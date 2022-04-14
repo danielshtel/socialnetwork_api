@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query, status, Response
 from ramda import is_empty
 
-from models import User, UserUpdate, UserBase
+from models import User, UserUpdate, UserCreate
 
 router = APIRouter(
     prefix='/user',
@@ -23,7 +23,7 @@ async def get_user(user_id: int):
 
 @router.post('/', response_model=User, response_model_exclude={'password'}, status_code=status.HTTP_201_CREATED,
              tags=['user'])
-async def create_user(user: UserBase):
+async def create_user(user: UserCreate):
     return await user.create()
 
 
