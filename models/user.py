@@ -1,10 +1,13 @@
 from datetime import date
 
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends, status
+from fastapi.security import OAuth2PasswordBearer
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel, select
 
 from database import SessionMixin
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 class UserBase(SessionMixin, SQLModel):
@@ -13,6 +16,7 @@ class UserBase(SessionMixin, SQLModel):
     email: EmailStr = Field(..., index=True, sa_column_kwargs={'unique': True})
     age: date = Field(..., index=True)
     hashed_password: str = Field(...)
+    disabled: bool | None = Field(None)
 
     class Config:
         schema_extra = {'example': {
@@ -75,6 +79,21 @@ class User(UserBase, table=True):
         with self._session:
             self._session.delete(self)
             self._session.commit()
+
+    @staticmethod
+    async def __fake_decode_user(token: str):
+        return await User.get_by_username(token)
+
+    @classmethod
+    async def get_current_user(cls, token: str = Depends(oauth2_scheme)):
+        user = await cls.__fake_decode_user(token)
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail='Invalid auth credentials',
+                headers={'WWW-Authenticate': 'Bearer'}
+            )
+        return user
 
 
 class UserUpdate(SQLModel):

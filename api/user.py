@@ -1,7 +1,8 @@
-from fastapi import APIRouter, HTTPException, Query, status, Response
+from fastapi import APIRouter, HTTPException, Query, status, Response, Depends
 from ramda import is_empty
 
 from models import User, UserUpdate, UserCreate
+from models.auth import Auth
 
 router = APIRouter(
     prefix='/user',
@@ -40,3 +41,8 @@ async def update_user(user_id: int, user: UserUpdate):
 async def delete_user(user_id: int):
     await (await User.get_user(user_id=user_id)).delete_user()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
+
+@router.get('/me', tags=['user'])
+async def get_me(current_user: User = Depends(Auth.get_current_active_user)):
+    return current_user
