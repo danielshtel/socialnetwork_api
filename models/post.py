@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 from pydantic import HttpUrl
-from sqlmodel import Field, SQLModel
+from sqlmodel import Field, SQLModel, Relationship
 
 from database import SessionMixin
 
@@ -40,6 +40,7 @@ class Post(PostBase, table=True):
     __tablename__ = 'post'
     id: int = Field(default=None, primary_key=True)
     likes: int = Field(default=0, index=True)
+    owner: "list[User]" = Relationship(back_populates='user')
 
     @classmethod
     async def get(cls, post_id: int):
@@ -77,3 +78,13 @@ class Post(PostBase, table=True):
             self._session.commit()
             self._session.refresh(self)
             return self
+
+
+from models.user import User
+
+User.update_forward_refs()
+# FIX circular import
+# https://stackoverflow.com/questions/63420889/fastapi-pydantic-circular-references-in-separate-files
+
+if __name__ == "__main__":
+    pass

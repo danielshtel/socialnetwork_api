@@ -3,7 +3,7 @@ from datetime import date
 from fastapi import HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import EmailStr
-from sqlmodel import Field, SQLModel, select
+from sqlmodel import Field, SQLModel, select, Relationship
 
 from database import SessionMixin
 
@@ -47,6 +47,7 @@ class User(UserBase, table=True):
     __tablename__ = 'user'
 
     id: int = Field(default=None, primary_key=True)
+    posts: "list[Post]" = Relationship(back_populates='post')
 
     @classmethod
     async def get_all(cls, limit: int = 10, offset: int = 0) -> list:
@@ -100,3 +101,13 @@ class UserUpdate(SQLModel):
     username: str | None = None
     email: EmailStr | None = None
     age: date | None = None
+
+
+from models.post import Post
+
+Post.update_forward_refs()
+# FIX circular import
+# https://stackoverflow.com/questions/63420889/fastapi-pydantic-circular-references-in-separate-files
+
+if __name__ == "__main__":
+    pass

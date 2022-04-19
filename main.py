@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from sqlmodel import Session
 
 from api import router
-from database import engine
+from database import engine, db_init
 from settings import settings
 
 logging.basicConfig(level=10)
@@ -17,7 +17,7 @@ app.include_router(router=router)
 
 @app.on_event('startup')
 async def on_startup():
-    pass
+    db_init()
 
 
 @app.on_event('shutdown')
