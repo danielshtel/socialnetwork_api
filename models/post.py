@@ -91,6 +91,12 @@ class Post(PostBase, table=True):
         cls._session.commit()
 
 
+class PostRead(Post, table=False):
+    pass
+
+
+# TODO https://sqlmodel.tiangolo.com/tutorial/fastapi/relationships/#models-with-relationships
+
 from models.user import User
 
 User.update_forward_refs()

@@ -1,11 +1,12 @@
 from fastapi import APIRouter, status, Response
 
-from models import Post, PostUpdate, PostCreate
+from models import Post, PostUpdate, PostCreate, PostRead
 
 router = APIRouter(prefix='/post')
 
 
-@router.get('/{post_id}', response_model=Post, tags=['post'])
+@router.get('/{post_id}', response_model=PostRead, tags=[
+    'post'])  # TODO https://sqlmodel.tiangolo.com/tutorial/fastapi/relationships/#models-with-relationships
 async def get_post(post_id: int):
     return await Post.get(post_id=post_id)
 
