@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status, Response
 
 from models import Post, PostUpdate, PostCreate
 
@@ -25,3 +25,9 @@ async def update_post(post_id: int, post_data: PostUpdate):
     post = await Post.get(post_id=post_id)
     data = post_data.dict(exclude_unset=True)
     return await post.update(post_data=data)
+
+
+@router.delete('/', status_code=status.HTTP_204_NO_CONTENT, tags=['post'])
+async def delete_post(post_id: int):
+    await Post.delete(post_id=post_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

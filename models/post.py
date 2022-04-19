@@ -84,6 +84,12 @@ class Post(PostBase, table=True):
             self._session.refresh(self)
             return self
 
+    @classmethod
+    async def delete(cls, post_id: int):
+        post = await Post.get(post_id)
+        cls._session.delete(post)
+        cls._session.commit()
+
 
 from models.user import User
 
