@@ -40,7 +40,7 @@ class Post(PostBase, table=True):
     __tablename__ = 'post'
     id: int = Field(default=None, primary_key=True)
     likes: int = Field(default=0, index=True)
-    owner: "list[User]" = Relationship(back_populates='user')
+    owner: "User" = Relationship(back_populates='user')
 
     @classmethod
     async def get(cls, post_id: int):
