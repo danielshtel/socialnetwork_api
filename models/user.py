@@ -4,7 +4,7 @@ from fastapi import HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel, select, Relationship
-
+from typing import List
 from database import SessionMixin
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -47,7 +47,7 @@ class User(UserBase, table=True):
     __tablename__ = 'user'
 
     id: int = Field(default=None, primary_key=True)
-    posts: "list[Post]" = Relationship(back_populates='post')
+    posts: List["Post"] = Relationship(back_populates='owner')
 
     @classmethod
     async def get_all(cls, limit: int = 10, offset: int = 0) -> list:
@@ -56,7 +56,7 @@ class User(UserBase, table=True):
 
     @classmethod
     async def get_by_username(cls, username: str):
-        user = cls._session.exec(select(cls).where(cls.username == username)).first()
+        user = cls._session.exec(select(cls).where(cls.username == username)).one()
         return user
 
     @classmethod

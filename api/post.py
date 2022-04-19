@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from models import Post, PostBase, PostUpdate
+from models import Post, PostUpdate, PostCreate
 
 router = APIRouter(prefix='/post')
 
@@ -15,9 +15,9 @@ async def like_post(post_id: int):
     return await Post.like(post_id=post_id)
 
 
-@router.post('/', response_model=Post, tags=['post'])
-async def create_post(post: PostBase):
-    return await post.create()
+@router.post('/{user_id}', response_model=Post, tags=['post'])
+async def create_post(user_id: int, post: PostCreate):
+    return await post.create(user_id=user_id)
 
 
 @router.patch('/', response_model=Post, tags=['post'])

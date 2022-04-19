@@ -15,9 +15,13 @@ class PostBase(SessionMixin, SQLModel):
             'image': 'https://picsum.photos/id/237/200/300'
         }}
 
-    async def create(self):
+
+class PostCreate(PostBase):
+
+    async def create(self, user_id):
         with self._session:
             post = Post.from_orm(self)
+            post.user_id = user_id
             self._session.add(post)
             self._session.commit()
             self._session.refresh(post)
@@ -40,7 +44,8 @@ class Post(PostBase, table=True):
     __tablename__ = 'post'
     id: int = Field(default=None, primary_key=True)
     likes: int = Field(default=0, index=True)
-    owner: "User" = Relationship(back_populates='user')
+    user_id: int | None = Field(foreign_key='user.id')
+    owner: "User" = Relationship(back_populates='posts')
 
     @classmethod
     async def get(cls, post_id: int):

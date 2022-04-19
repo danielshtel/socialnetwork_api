@@ -2,7 +2,11 @@ from sqlmodel import create_engine, Session, SQLModel
 
 from settings import settings
 
-engine = create_engine(settings.db_path, connect_args={'check_same_thread': False})
+engine = create_engine(settings.db_path, connect_args={'check_same_thread': False}, echo=True)
+
+
+def drop_db():
+    SQLModel.metadata.drop_all(engine)
 
 
 def db_init():

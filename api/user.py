@@ -1,8 +1,9 @@
-from fastapi import APIRouter, HTTPException, Query, status, Response, Depends
+from fastapi import APIRouter, HTTPException, Query, status, Response
 from ramda import is_empty
+from sqlmodel import Session
 
-from models import User, UserUpdate, UserCreate
-from models.auth import Auth
+from database import engine
+from models import User, UserUpdate, UserCreate, Post
 
 router = APIRouter(
     prefix='/user',
@@ -43,6 +44,8 @@ async def delete_user(user_id: int):
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
-@router.get('/me', tags=['user'])
-async def get_me(current_user: User = Depends(Auth.get_current_active_user)):
-    return current_user
+@router.get('/posts/{user_id}', response_model=list[Post], response_model_exclude={'user_id'})
+async def get_posts(user_id: int):
+    with Session(engine) as session:
+        user = session.get(User, user_id)
+        return user.posts
