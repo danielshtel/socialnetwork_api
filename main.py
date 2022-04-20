@@ -18,6 +18,7 @@ app.include_router(router=router)
 @app.on_event('startup')
 async def on_startup():
     db_init()
+    logger.info('Interactive docs: http://0.0.0.0:8000/docs')
 
 
 @app.on_event('shutdown')
@@ -44,3 +45,8 @@ async def on_shutdown():
 
 if __name__ == '__main__':
     uvicorn.run('main:app', host=settings.server_host, port=settings.server_port, reload=True)
+
+# TODO user routes
+# TODO hide password
+# TODO custom age validators or something like that
+# TODO read more about dependencies FastAPI

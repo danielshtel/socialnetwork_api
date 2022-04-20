@@ -14,8 +14,7 @@ class UserBase(SessionMixin, SQLModel):
     username: str = Field(..., index=True,
                           sa_column_kwargs={'unique': True})  # https://github.com/tiangolo/sqlmodel/issues/65
     email: EmailStr = Field(..., index=True, sa_column_kwargs={'unique': True})
-    age: date = Field(..., index=True)
-    hashed_password: str = Field(...)
+    age: str = Field(..., index=True)
     disabled: bool | None = Field(False)
 
     class Config:
@@ -23,12 +22,17 @@ class UserBase(SessionMixin, SQLModel):
             'username': 'username',
             'age': '2022-12-01',
             'email': 'example@mail.com',
-            'hashed_password': '123456'
+            'password': '123456'
         }}
         orm_mode = True
 
 
+class UserRead(UserBase):
+    pass
+
+
 class UserCreate(UserBase):
+    password: str = Field(...)
 
     async def create(self):
         with self._session:
@@ -44,6 +48,7 @@ class User(UserBase, table=True):
 
     id: int = Field(default=None, primary_key=True)
     posts: List["Post"] = Relationship(back_populates='owner')
+    password: str = Field(...)
 
     @classmethod
     async def get_all(cls, limit: int = 10, offset: int = 0) -> list:

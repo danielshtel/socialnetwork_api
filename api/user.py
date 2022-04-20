@@ -1,9 +1,10 @@
-from fastapi import APIRouter, HTTPException, Query, status, Response
+from fastapi import APIRouter, HTTPException, Query, status, Response, Depends
 from ramda import is_empty
 from sqlmodel import Session
 
 from database import engine
 from models import User, UserUpdate, UserCreate, Post
+from utils import get_current_user
 
 router = APIRouter(
     prefix='/user',
@@ -18,9 +19,9 @@ async def users(limit: int | None = Query(None, lt=101, gt=0)):
     return user_list
 
 
-@router.get('/{user_id}', response_model=UserUpdate, tags=['user'])
-async def get_user(user_id: int):
-    return await User.get_user(user_id=user_id)
+@router.get('/', response_model=User, tags=['user'], response_model_exclude={'password'})
+async def get_user(user: User = Depends(get_current_user)):
+    return user
 
 
 @router.post('/', response_model=User, response_model_exclude={'password'}, status_code=status.HTTP_201_CREATED,
