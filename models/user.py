@@ -16,7 +16,7 @@ class UserBase(SessionMixin, SQLModel):
     email: EmailStr = Field(..., index=True, sa_column_kwargs={'unique': True})
     age: date = Field(..., index=True)
     hashed_password: str = Field(...)
-    disabled: bool | None = Field(None)
+    disabled: bool | None = Field(False)
 
     class Config:
         schema_extra = {'example': {
@@ -26,10 +26,6 @@ class UserBase(SessionMixin, SQLModel):
             'hashed_password': '123456'
         }}
         orm_mode = True
-
-
-class UserAuth(UserBase):
-    hashed_password: str
 
 
 class UserCreate(UserBase):
