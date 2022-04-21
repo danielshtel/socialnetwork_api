@@ -1,10 +1,11 @@
 from datetime import date
+from typing import List
 
-from fastapi import HTTPException, Depends, status
+from fastapi import HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from pydantic import EmailStr
 from sqlmodel import Field, SQLModel, select, Relationship
-from typing import List
+
 from database import SessionMixin
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -53,7 +54,7 @@ class User(UserBase, table=True):
     @classmethod
     async def get_all(cls, limit: int = 10, offset: int = 0) -> list:
         with cls._session:
-            return cls._session.exec(select(cls).offset(offset).limit(limit)).all()
+            return cls._session.exec(select(cls).offset(offset).limit(limit)).all()  # TODO maybe remove this
 
     @classmethod
     async def get_by_username(cls, username: str):
@@ -81,21 +82,6 @@ class User(UserBase, table=True):
         with self._session:
             self._session.delete(self)
             self._session.commit()
-
-    @staticmethod
-    async def __fake_decode_user(token: str):
-        return await User.get_by_username(token)
-
-    @classmethod
-    async def get_current_user(cls, token: str = Depends(oauth2_scheme)):
-        user = await cls.__fake_decode_user(token)
-        if not user:
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail='Invalid auth credentials',
-                headers={'WWW-Authenticate': 'Bearer'}
-            )
-        return user
 
 
 class UserUpdate(SQLModel):

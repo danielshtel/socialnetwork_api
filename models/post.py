@@ -1,4 +1,4 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, status
 from pydantic import HttpUrl
 from sqlmodel import Field, SQLModel, Relationship
 
@@ -48,11 +48,19 @@ class Post(PostBase, table=True):
     owner: "User" = Relationship(back_populates='posts')
 
     @classmethod
-    async def get(cls, post_id: int):
+    async def get(cls, post_id: int, user_id: int):
+        exception = HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail='Permissions denied',
+            headers={'WWW-Authenticate': 'Bearer'}
+
+        )
         with cls._session:
             post = cls._session.get(cls, post_id)
             if not post:
                 raise HTTPException(status_code=404, detail='Post does not exist')
+            if not post.owner.id == user_id:
+                raise exception
             return post
 
     @classmethod
@@ -75,7 +83,15 @@ class Post(PostBase, table=True):
                     raise HTTPException(status_code=404, detail='Post does not exist')
             return post
 
-    async def update(self, post_data: dict):
+    async def update(self, post_data: dict, user_id: int):
+        exception = HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail='Permissions denied',
+            headers={'WWW-Authenticate': 'Bearer'}
+
+        )
+        if not self.owner.id == user_id:
+            raise exception
         with self._session:
             for key, value in post_data.items():
                 setattr(self, key, value)
@@ -85,8 +101,8 @@ class Post(PostBase, table=True):
             return self
 
     @classmethod
-    async def delete(cls, post_id: int):
-        post = await Post.get(post_id)
+    async def delete(cls, post_id: int, user_id: int):
+        post = await Post.get(post_id, user_id=user_id)
         cls._session.delete(post)
         cls._session.commit()
 

@@ -50,3 +50,4 @@ if __name__ == '__main__':
 # TODO hide password
 # TODO custom age validators or something like that
 # TODO read more about dependencies FastAPI
+# TODO upload static images
