@@ -47,7 +47,7 @@ async def get_posts(user_data: User = Depends(get_current_user)):
         if is_empty(user.posts):
             exception = HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f'User {user.username} doesn\'t have posts yet'
+                detail=f'User {user.username} doesn\'t have any posts yet'
             )
             raise exception
         return user.posts
