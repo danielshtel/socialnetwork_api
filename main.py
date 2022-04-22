@@ -46,8 +46,5 @@ async def on_shutdown():
 if __name__ == '__main__':
     uvicorn.run('main:app', host=settings.server_host, port=settings.server_port, reload=True)
 
-# TODO user routes
-# TODO hide password
 # TODO custom age validators or something like that
-# TODO read more about dependencies FastAPI
 # TODO upload static images

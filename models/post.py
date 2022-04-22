@@ -69,6 +69,7 @@ class Post(PostBase, table=True):
             post = cls._session.get(cls, post_id)
             post.likes += 1
             cls._session.commit()
+            cls._session.refresh(post)
             if not post:
                 raise HTTPException(status_code=404, detail='Post does not exist')
             return post

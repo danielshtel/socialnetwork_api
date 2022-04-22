@@ -26,7 +26,7 @@ async def create_post(post: PostCreate, user: User = Depends(get_current_user)):
 async def update_post(post_id: int, post_data: PostUpdate, user: User = Depends(get_current_user)):
     post = await Post.get(post_id=post_id, user_id=user.id)
     data = post_data.dict(exclude_unset=True)
-    return await post.update(post_data=data)
+    return await post.update(post_data=data, user_id=user.id)
 
 
 @router.delete('/', status_code=status.HTTP_204_NO_CONTENT)
